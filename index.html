@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Question & Answer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #question-select { margin-bottom: 20px; }
+        #options { margin: 20px 0; }
+        .option { margin-bottom: 10px; }
+        #result { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+<select id="select-question" onchange="loadQuestion()">
+    <option value="">Select a Question from the List</option>
+</select>
+<h2 id="question">Select a Question to Start the Quiz!</h2>
+<div id="options"></div>
+<button onclick="submitAnswer()" disabled id="button">Submit</button>
+<div id="result"></div>
+<script src="script.js"></script>
+</body>
+</html>
