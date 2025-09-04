@@ -87,17 +87,28 @@ try{
             // Get selected answer ID and question ID
             $selectedAnswerId = isset($_GET['selectedAnswerId']) ? (int)$_GET['selectedAnswerId'] : 0;
             $questionId = isset($_GET['question_id']) ? (int)$_GET['question_id'] : 1;
+            $description = isset($_GET['descriptionText']) ? (string)$_GET['descriptionText'] : 'No Description!';
 
             // Fetch correct answer ID for the question
-            $stmt = $connection->prepare("SELECT a.id FROM answers a WHERE question_id = ? and correct = 'true'");
+            $stmt = $connection->prepare("SELECT a.id FROM answers a WHERE a.question_id = ? AND correct = true");
             $stmt->execute([$questionId]);
+//            $correctAnswerId = $stmt->fetch(PDO::FETCH_ASSOC);
             $correctAnswerId = $stmt->fetch(PDO::FETCH_COLUMN);
 
             // Check if selected answer is correct
             $isCorrect = $selectedAnswerId === $correctAnswerId;
+
+            $stmt1 = $connection->prepare("Select descriptionText from questions where id=?");
+            $stmt1->execute([$questionId]);
+            $desc = $stmt1->fetch(PDO::FETCH_ASSOC);
+
             // Return result
-            echo json_encode(['isCorrect' => $isCorrect, 'message' => $isCorrect ? 'Hey du hast es!' : 'Versuch nochmal du Trottel!']);
+            echo json_encode(['isCorrect' => $isCorrect,
+                'message' => $isCorrect ? $desc['descriptionText'] : 'Versuch nochmal du Trottel!'
+                ]);
+
         }
+
         exit;
 
     }

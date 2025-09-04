@@ -48,8 +48,6 @@
 //     }
 // }
 
-const php_file = 'databank.php';
-
 const cardsData = [
     {
         id: 1,
@@ -3981,12 +3979,13 @@ const cardsData = [
 //     cards.push(card);
 // }
 
+const php_file = 'databank.php';
 async function saveToDatabase() {
     try {
-        // Die Daten in eine JSON-Zeichenkette umwandeln
+
         const payload = JSON.stringify(cardsData);
 
-        // Den Fetch-Aufruf ausführen
+
         const response = await fetch(php_file, {
             method: 'POST',
             headers: {
@@ -3995,12 +3994,12 @@ async function saveToDatabase() {
             body: payload
         });
 
-        // Prüfen, ob die Antwort vom Server erfolgreich war
+
         if (!response.ok) {
             throw new Error(`HTTP-Failed! Status: ${response.status}`);
         }
 
-        // Die Antwort des PHP-Skripts als Text auslesen
+
         const result = await response.text();
         console.log("Result from Server:", result);
 
@@ -4009,5 +4008,5 @@ async function saveToDatabase() {
     }
 }
 
-// Die Funktion aufrufen, um die Daten zu speichern
+
 saveToDatabase();

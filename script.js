@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', async ()=> {
                 return;
             }
 
-            const select = document.getElementById('select-question');
+           const selectQuestion = document.getElementById('select-question');
             data.questions.forEach(question => {
                 const option = document.createElement('option');
                 option.value = question.id;
                 option.textContent = question.questionText;
-                select.appendChild(option);
+                selectQuestion.appendChild(option);
             });
         }catch (error) {
             console.error('Error:', error);
@@ -55,9 +55,6 @@ try{
         div.className = 'option';
         div.innerHTML = `<input type="radio" name="answer" value="${answer.id}" id="option${answer.id}">
                              <label for="option${answer.id}">${answer.content}</label>`;
-        const smallDiv = document.createElement('div');
-        smallDiv.className = 'option';
-        smallDiv.textContent = `${answer.descriptionText}`;
         optionsDiv.appendChild(div);
     });
 
@@ -92,6 +89,9 @@ async function submitAnswer(){
         const resultDiv = document.getElementById('result');
         resultDiv.textContent = data.message;
         resultDiv.style.color = data.isCorrect ? 'green' : 'red';
+        const smallDiv = document.createElement('div');
+        smallDiv.textContent = data.description;
+        resultDiv.appendChild(smallDiv);
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('result').textContent = 'Error checking answer';
