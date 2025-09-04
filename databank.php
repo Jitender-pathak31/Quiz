@@ -57,13 +57,13 @@ try{
     $connection = new PDO($dsn, $user, $pass);
     if(isset($_GET['action'])){
         if($_GET['action'] === 'questions'){
-            $stmt = $connection->prepare("select id, questionHeader, questionText from questions");
+            $stmt = $connection->prepare("select id, questionText from questions");
             $stmt->execute();
             $question = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode(['questions' => $question]);
         }else if($_GET['action'] === 'questionAnswer') {
             $questionId = isset($_GET['id']) ? (int)$_GET['id'] : 1;
-            $stmt = $connection->prepare("Select questionText from questions where id=?");
+            $stmt = $connection->prepare("Select questionHeader, questionText from questions where id=?");
             $stmt->execute([$questionId]);
             $question = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -98,13 +98,14 @@ try{
             // Check if selected answer is correct
             $isCorrect = $selectedAnswerId === $correctAnswerId;
 
+            // fetching description for the right answer
             $stmt1 = $connection->prepare("Select descriptionText from questions where id=?");
             $stmt1->execute([$questionId]);
             $desc = $stmt1->fetch(PDO::FETCH_ASSOC);
 
             // Return result
             echo json_encode(['isCorrect' => $isCorrect,
-                'message' => $isCorrect ? $desc['descriptionText'] : 'Versuch nochmal du Trottel!'
+                'message' => $isCorrect ? 'Wunderbar! '.$desc['descriptionText'] : 'Versuch nochmal du Trottel!'
                 ]);
 
         }

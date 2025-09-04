@@ -3983,7 +3983,7 @@ const php_file = 'databank.php';
 async function saveToDatabase() {
     try {
 
-        const payload = JSON.stringify(cardsData);
+        const jsonData_to_jsonString = JSON.stringify(cardsData);
 
 
         const response = await fetch(php_file, {
@@ -3991,12 +3991,12 @@ async function saveToDatabase() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: payload
+            body: jsonData_to_jsonString
         });
 
 
         if (!response.ok) {
-            throw new Error(`HTTP-Failed! Status: ${response.status}`);
+            throw new Error(`Failed! Status: ${response.status}`);
         }
 
 

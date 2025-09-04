@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async ()=> {
                 return;
             }
 
+
            const selectQuestion = document.getElementById('select-question');
             data.questions.forEach(question => {
                 const option = document.createElement('option');
@@ -23,11 +24,12 @@ document.addEventListener('DOMContentLoaded', async ()=> {
         }
 });
 
+//load the question and their options
 async function loadQuestion(){
 
         const select = document.getElementById('select-question');
-        const questionId = select.value;
-        if (!questionId) {
+        const id = select.value;
+        if (!id) {
             document.getElementById('question').textContent = 'Select a Question to Start!';
             document.getElementById('options').innerHTML = '';
             document.getElementById('result').textContent = '';
@@ -35,18 +37,19 @@ async function loadQuestion(){
             return;
         }
 try{
-    const res = await fetch(`databank.php?action=questionAnswer&id=${questionId}`, {
+    const res = await fetch(`databank.php?action=questionAnswer&id=${id}`, {
         method: 'GET',
-        headers: {'Content-type': 'application/json'},
+        headers: {'Content-type': 'application/json'}
     });
 
     const data = await res.json();
     if (data.error) {
         console.error('Error: ', data.error);
-        document.getElementById('question').textContent = 'Error loading Question from Database';
+        document.getElementById('questions').textContent = 'Error loading Question from Database';
         return;
     }
-    document.getElementById('question').textContent = data.questionText;
+
+    document.getElementById('questions').textContent = `${data.question[0].questionHeader} : ${data.question[0].questionText}`;
 
     const optionsDiv = document.getElementById('options');
     optionsDiv.innerHTML = '';
@@ -68,6 +71,8 @@ try{
     }
 }
 
+
+// submit the answer
 async function submitAnswer(){
     try{
         const selectedOptions = document.querySelector('input[name="answer"]:checked');

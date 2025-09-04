@@ -9,17 +9,24 @@
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         #question-select { margin-bottom: 20px; }
-        #options { margin: 20px 0; }
+        #options { margin: 20px 0;}
         .option { margin-bottom: 10px; }
         #result { color: green; font-weight: bold; }
+        h3{
+            color: coral;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
+<h2 >Select a Question to Start the Quiz!</h2>
+<div class="questionOption" style="color: cadetblue">
 <select class="select-question" id="select-question" onchange="loadQuestion()">
-    <option id="question-List">Select a Question from the List</option>
+    <option id="question-List" >Select a Question from the List</option>
 </select>
-<h2 id="question">Select a Question to Start the Quiz!</h2>
+    <h3 id="questions"></h3>
 <div id="options"></div>
+</div>
 <button onclick="submitAnswer()" disabled id="button">Submit</button>
 <div id="result"></div>
 <script src="script.js"></script>
