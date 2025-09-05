@@ -3996,7 +3996,7 @@ async function saveToDatabase() {
 
 
         if (!response.ok) {
-            throw new Error(`Failed! Status: ${response.status}`);
+            throw new Error(`Response Failed! Status: ${response.status}`);
         }
 
 

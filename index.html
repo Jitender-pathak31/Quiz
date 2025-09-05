@@ -19,7 +19,12 @@
     </style>
 </head>
 <body>
-<h2 >Select a Question to Start the Quiz!</h2>
+<select id="select-category" style="color: indianred" onchange="loadCategory()">
+    <option id="category-list">Select a Category to start the Quiz</option>
+</select>
+<h3 id="categories"></h3>
+<div id="category-options"></div>
+<!--<h2 >Select a Question to Start the Quiz!</h2>-->
 <div class="questionOption" style="color: cadetblue">
 <select class="select-question" id="select-question" onchange="loadQuestion()">
     <option id="question-List" >Select a Question from the List</option>

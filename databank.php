@@ -57,11 +57,16 @@ try{
     $connection = new PDO($dsn, $user, $pass);
     if(isset($_GET['action'])){
         if($_GET['action'] === 'questions'){
-            $stmt = $connection->prepare("select id, questionText from questions");
-            $stmt->execute();
+            if(isset($_GET['category']) && $_GET['category'] !== '') {
+                $stmt = $connection->prepare("select id, questionText, categories from questions where categories = ?");
+                $stmt->execute([$_GET['category']]);
+            } else {
+                $stmt = $connection->prepare("select id, questionText, categories from questions");
+                $stmt->execute();
+            }
             $question = $stmt->fetchAll(PDO::FETCH_ASSOC);
             echo json_encode(['questions' => $question]);
-        }else if($_GET['action'] === 'questionAnswer') {
+        } else if($_GET['action'] === 'questionAnswer') {
             $questionId = isset($_GET['id']) ? (int)$_GET['id'] : 1;
             $stmt = $connection->prepare("Select questionHeader, questionText from questions where id=?");
             $stmt->execute([$questionId]);

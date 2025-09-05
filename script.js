@@ -11,18 +11,103 @@ document.addEventListener('DOMContentLoaded', async ()=> {
                 return;
             }
 
+            // Get unique categories
+            const categories = [...new Set(data.questions.map(q => q.categories))];
 
-           const selectQuestion = document.getElementById('select-question');
+            // Populate category dropdown with unique categories
+            const selectCategories = document.getElementById('select-category');
+            // Clear existing options except the first one
+            while (selectCategories.options.length > 1) {
+                selectCategories.remove(1);
+            }
+
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                selectCategories.appendChild(option);
+            });
+
+            // Populate question dropdown with all questions initially
+            const selectQuestion = document.getElementById('select-question');
+            // Clear existing options except the first one
+            while (selectQuestion.options.length > 1) {
+                selectQuestion.remove(1);
+            }
+
             data.questions.forEach(question => {
                 const option = document.createElement('option');
                 option.value = question.id;
                 option.textContent = question.questionText;
                 selectQuestion.appendChild(option);
             });
+
         }catch (error) {
             console.error('Error:', error);
         }
 });
+
+
+// load the category for the databank
+
+async function loadCategory(){
+    const select = document.getElementById('select-category');
+    const category = select.value;
+    if(!category || category === 'Select a Category to start the Quiz'){
+        document.getElementById('categories').textContent = 'Please select a category';
+        // Reset question dropdown to initial state
+        const selectQuestion = document.getElementById('select-question');
+        while (selectQuestion.options.length > 1) {
+            selectQuestion.remove(1);
+        }
+        return;
+    }
+
+    try{
+        // Fetch questions filtered by the selected category
+        const res = await fetch(`databank.php?action=questions&category=${category}`,{
+            method: 'GET',
+            headers: {'Content-type' : 'application/json'}
+        });
+
+        const data = await res.json();
+
+
+        if(data.error){
+            console.log('Category Error: ', data.error);
+            document.getElementById('categories').textContent = 'Error loading categories';
+            return;
+        }
+
+        // Update the category header
+        document.getElementById('categories').textContent = `Category: ${category}`;
+
+        // Update the question dropdown with questions from the selected category
+        const selectQuestion = document.getElementById('select-question');
+        // Clear existing options except the first one
+        while (selectQuestion.options.length > 1) {
+            selectQuestion.remove(1);
+        }
+
+        // Add questions from the selected category
+        data.questions.forEach(question => {
+            const option = document.createElement('option');
+            option.value = question.id;
+            option.textContent = question.questionText;
+            selectQuestion.appendChild(option);
+        });
+
+        // Reset question display
+        document.getElementById('questions').textContent = '';
+        document.getElementById('options').innerHTML = '';
+        document.getElementById('result').textContent = '';
+        document.getElementById('button').disabled = true;
+
+    } catch (error){
+        console.error('Error', error);
+        document.getElementById('categories').textContent = 'Error loading categories';
+    }
+}
 
 //load the question and their options
 async function loadQuestion(){
@@ -30,7 +115,7 @@ async function loadQuestion(){
         const select = document.getElementById('select-question');
         const id = select.value;
         if (!id) {
-            document.getElementById('question').textContent = 'Select a Question to Start!';
+            document.getElementById('questions').textContent = 'Select a Question to Start!';
             document.getElementById('options').innerHTML = '';
             document.getElementById('result').textContent = '';
             document.getElementById('button').disabled = true;
